@@ -19,15 +19,19 @@ public class AdsAppselecctionpage {
     }
 
     @FindBy(xpath = "(//strong[normalize-space()='Apollo Digital Signage'])[1]")
-    private WebElement appselection;
+    private WebElement appselectionbtn;
 
     @FindBy(xpath = "(//span[contains(text(),'Dashboard')])[1]")
     private WebElement dashboardtext;
 
     public void appselection() {
-        WebElement app = wait.waitForVisibility(appselection);
+        System.out.println("Waiting for 'Apollo Digital Signage' element to be visible...");
+        WebElement app = wait.waitForVisibility(appselectionbtn);
+        System.out.println("'Apollo Digital Signage' element is visible. Waiting for clickability...");
         wait.waitForClickability(app).click();
+        System.out.println("Clicked on 'Apollo Digital Signage'.");
     }
+
 
     public void isTitleAsExpected(String expectedTitle) {
         WebElement dash = wait.waitForVisibility(dashboardtext);

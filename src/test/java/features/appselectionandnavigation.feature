@@ -4,7 +4,7 @@ Feature:LED Campaign Creation
     When I login with valid credentials
     Then verify the page title
 
-  @regression
+  @smoke
   Scenario: Select Apollo Digital Signage app
     When I select the Apollo Digital Signage app
     Then the dashboard title should be verified

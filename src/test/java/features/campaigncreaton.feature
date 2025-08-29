@@ -1,6 +1,6 @@
 Feature: LED Campaign Creation
 
-  @smoke @regression
+  @smoke
   Scenario: Login and select Apollo Digital Signage app
     Given I am on the Ads login page
     When I login with valid credentials
@@ -9,7 +9,7 @@ Feature: LED Campaign Creation
     Then the dashboard title should be verified
 
 
-  @smoke @regression
+  @smoke
     Scenario: Navigate to the LED Campaign page
     When I navigate to the LED Campaign page
     Then the LED Campaign page title should be verified

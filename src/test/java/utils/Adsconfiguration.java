@@ -1,45 +1,51 @@
 package utils;
 
-import java.io.File;
-import java.io.FileInputStream;
+import java.io.InputStream;
 import java.util.Properties;
 
 public class Adsconfiguration {
 
-    public Properties pro;
-    public String url;
-    public String username;
-    public String password;
+    private Properties pro;
+    private String url;
+    private String username;
+    private String password;
 
     public Adsconfiguration() {
         try {
-            // Load properties file
-            File file = new File(System.getProperty("user.dir") + "/src/test/resources/global.properties");
-            if (!file.exists()) {
-                throw new RuntimeException("global.properties not found at: " + file.getAbsolutePath());
+            // Load global.properties from the classpath (src/test/resources or src/main/resources)
+            InputStream inputStream = getClass().getClassLoader().getResourceAsStream("global.properties");
+
+            if (inputStream == null) {
+                throw new RuntimeException("global.properties file not found in classpath");
             }
 
-            FileInputStream fis = new FileInputStream(file);
             pro = new Properties();
-            pro.load(fis);
+            pro.load(inputStream);
 
-            // Get env  from properties file
+            // Read environment value
             String env = pro.getProperty("env");
+            if (env == null) {
+                throw new RuntimeException("'env' property missing in global.properties");
+            }
 
-            if (env.equalsIgnoreCase("dev")) {
-                url = pro.getProperty("baseurldev");
-                username = pro.getProperty("usernamedev");
-                password = pro.getProperty("passworddev");
-            } else if (env.equalsIgnoreCase("uat")) {
-                url = pro.getProperty("baseurluat");
-                username = pro.getProperty("usernameuat");
-                password = pro.getProperty("passworduat");
-            } else if (env.equalsIgnoreCase("prod")) {
-                url = pro.getProperty("baseurlprod");
-                username = pro.getProperty("usernameprod");
-                password = pro.getProperty("passwordprod");
-            } else {
-                throw new RuntimeException("Invalid environment in properties file: " + env);
+            switch (env.toLowerCase()) {
+                case "dev":
+                    url = pro.getProperty("baseurldev");
+                    username = pro.getProperty("usernamedev");
+                    password = pro.getProperty("passworddev");
+                    break;
+                case "uat":
+                    url = pro.getProperty("baseurluat");
+                    username = pro.getProperty("usernameuat");
+                    password = pro.getProperty("passworduat");
+                    break;
+                case "prod":
+                    url = pro.getProperty("baseurlprod");
+                    username = pro.getProperty("usernameprod");
+                    password = pro.getProperty("passwordprod");
+                    break;
+                default:
+                    throw new RuntimeException("Invalid 'env' property value: " + env);
             }
 
         } catch (Exception e) {
@@ -48,17 +54,14 @@ public class Adsconfiguration {
     }
 
     public String geturl() {
-
         return url;
     }
 
     public String getusername() {
-
         return username;
     }
 
     public String getpassword() {
-
         return password;
     }
 }
